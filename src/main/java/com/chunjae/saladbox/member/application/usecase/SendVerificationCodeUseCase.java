@@ -4,6 +4,6 @@ import java.security.NoSuchAlgorithmException;
 
 public interface SendVerificationCodeUseCase {
 
-    String sendVerificationCode(String toEmail) throws NoSuchAlgorithmException;
+    String sendVerificationCode(String toEmail, String code);
 
 }

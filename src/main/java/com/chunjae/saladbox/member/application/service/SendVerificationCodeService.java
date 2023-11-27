@@ -17,30 +17,24 @@ import java.util.Random;
 class SendVerificationCodeService implements SendVerificationCodeUseCase {
 
     private final JavaMailSender javaMailSender;
+    private final SaveVerificationCodePort saveVerificationCodePort;
 
-    private final SaveVerificationCodePort saveVerificationCode;
 
-    /*
-    인증코드 이메일 전송
-    1. 인증코드 난수 생성
-    2. 데이터베이스에 이메일+인증코드 저장
-    3. 사용자 이메일로 인증코드 발송
-     */
     @Transactional
     @Override
-    public String sendVerificationCode(String toEmail){
+    public String sendVerificationCode(String toEmail, String verificationCode) {
 
-        try {
+        /*
+        인증코드 이메일 전송
+        1. 인증코드 난수 생성
+        2. 데이터베이스에 이메일+인증코드 저장
+        3. 사용자 이메일로 인증코드 발송
+         */
 
-            String code = createVerificationCode();
-            saveVerificationCode.save(toEmail+code);
-            SimpleMailMessage emailForm = createEmailForm(toEmail, code);
-            javaMailSender.send(emailForm);
-            return code;
-
-        } catch (NoSuchAlgorithmException e) {
-           return null;
-        }
+        saveVerificationCodePort.save(toEmail+verificationCode);
+        SimpleMailMessage emailForm = createEmailForm(toEmail, verificationCode);
+        javaMailSender.send(emailForm);
+        return verificationCode;
     }
 
 
@@ -54,23 +48,6 @@ class SendVerificationCodeService implements SendVerificationCodeUseCase {
         message.setText(code);
 
         return message;
-    }
-
-
-    //이메일 인증번호 생성
-    public String createVerificationCode() throws NoSuchAlgorithmException {
-
-        int len = 6;
-
-        //Random random = new Random();
-        Random random = SecureRandom.getInstanceStrong();
-
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < len; i++) {
-            builder.append(random.nextInt(10));
-        }
-        return builder.toString();
-
     }
 
 }
