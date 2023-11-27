@@ -2,6 +2,7 @@ package com.chunjae.saladbox.member.web;
 
 import com.chunjae.saladbox.member.application.usecase.CheckDuplicatedEmailUseCase;
 import com.chunjae.saladbox.member.application.usecase.CheckVerificationCodeUseCase;
+import com.chunjae.saladbox.member.application.usecase.CreateVerificationCodeUseCase;
 import com.chunjae.saladbox.member.application.usecase.SendVerificationCodeUseCase;
 import com.chunjae.saladbox.member.exception.BusinessLogicException;
 import com.chunjae.saladbox.member.exception.DuplicatedEmailException;
@@ -20,6 +21,7 @@ public class EmailVerificationController {
     private final CheckDuplicatedEmailUseCase checkDuplicatedEmailUseCase;
     private final SendVerificationCodeUseCase sendVerificationCodeUseCase;
     private final CheckVerificationCodeUseCase checkVerificationCodeUseCase;
+    private final CreateVerificationCodeUseCase createVerificationCodeUseCase;
 
     //이메일 중복체크
     @GetMapping("/checkDup")
@@ -33,11 +35,19 @@ public class EmailVerificationController {
     @PostMapping("/verificationCode")
     @ResponseStatus(HttpStatus.CREATED)
     void createVerificationCode(String email) {
+
+        String verificationCode;
+
+        //1. 이메일 인증코드 발급
         try {
-            sendVerificationCodeUseCase.sendVerificationCode(email);
+            verificationCode = createVerificationCodeUseCase.createVerificationCode();
         } catch (NoSuchAlgorithmException e) {
             throw new BusinessLogicException(e.getMessage());
         }
+
+        //2. 인증코드 디비에 저장하고, 메일 발송
+        sendVerificationCodeUseCase.sendVerificationCode(email, verificationCode);
+
     }
 
     //이메일 인증
