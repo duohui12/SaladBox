@@ -17,7 +17,7 @@ class CheckVerificationCodeService implements CheckVerificationCodeUseCase {
     @Override
     public boolean isValidCode(String code) {
         Optional<VerificationCode> verificationCode = getVerificationCodePort.findByCode(code);
-        return verificationCode.isPresent();
+        return verificationCode.isPresent() && verificationCode.get().checkValidation();
     }
 
 }

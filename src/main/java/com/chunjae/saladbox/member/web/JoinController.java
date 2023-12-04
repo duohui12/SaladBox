@@ -1,4 +1,6 @@
 package com.chunjae.saladbox.member.web;
+import com.chunjae.saladbox.member.application.usecase.CheckDuplicatedEmailUseCase;
+import com.chunjae.saladbox.member.application.usecase.CheckVerificationCodeUseCase;
 import com.chunjae.saladbox.member.application.usecase.JoinUseCase;
 import com.chunjae.saladbox.member.domain.Member;
 import com.github.dozermapper.core.Mapper;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 public class JoinController {
 
     private final JoinUseCase joinUseCase;
+    private final CheckDuplicatedEmailUseCase checkDuplicatedEmailUseCase;
+    private final CheckVerificationCodeUseCase checkVerificationCodeUseCase;
     private final Mapper mapper;
 
     //회원가입 페이지 리턴
@@ -31,6 +35,23 @@ public class JoinController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     JoinResponseDto join(@ModelAttribute @Valid JoinRequestDto joinRequestDto) {
+
+        //비밀번호 같은지 체크
+        if(!joinRequestDto.checkPassword()){
+            //do something
+        }
+
+        //중복된 이메일 아닌지 체크
+        if(checkDuplicatedEmailUseCase.isDuplicatedEmail(joinRequestDto.getEmail())){
+            //do something
+        }
+
+        //인증된 이메일인지 체크
+        if(!checkVerificationCodeUseCase.isValidCode(joinRequestDto.getEmail()+joinRequestDto.getVerificationCode())){
+            //do something
+        }
+
+
         Member member = mapper.map(joinRequestDto,Member.class);
         return mapper.map(joinUseCase.join(member), JoinResponseDto.class);
     }
@@ -41,19 +62,22 @@ public class JoinController {
 //자바빈패턴 : 매개변수가 없는 생성자로 객체를 생성한 후에, setter 메서드를 이용해 필드의 초기값을 설정하는 방식
 
 
-//default class => 동일 패키지 내에서 접근할 수 있다.
 //public protected(같은 패키지 + 상속) default(같은 패키지) private
+//not blank (must not be null and must contain at least one non-whitespace character) "a"(0) , " "(x), ""(x)
 //not empty (must not be null nor empty) " " okay
-//not blank (must not be null and must contain at least one non-whitespace character) "a"
 //not null (must not be null) "" " " 이면 okay
 @Valid
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 class JoinRequestDto {
 
     @Email
     private String email;
+
+    @NotBlank
+    private String verificationCode;
 
     @NotBlank
     private String password;
@@ -65,6 +89,9 @@ class JoinRequestDto {
     @Size(min=1, max=10)
     private String name;
 
+    public boolean checkPassword(){
+        return password.equals(password_check);
+    }
 }
 
 

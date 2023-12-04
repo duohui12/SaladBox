@@ -19,7 +19,7 @@ class VerificationCodePersistenceAdapter implements SaveVerificationCodePort
 
     @Override
     public String save(String code) {
-        VerificationCodeEntity entity = new VerificationCodeEntity(code);
+        VerificationCodeEntity entity = new VerificationCodeEntity(code,false);
         return verificationCodeSpringDataRepository.save(entity).getCode();
     }
 

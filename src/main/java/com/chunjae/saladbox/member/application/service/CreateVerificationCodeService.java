@@ -1,10 +1,8 @@
 package com.chunjae.saladbox.member.application.service;
 
-import com.chunjae.saladbox.member.application.port.SaveVerificationCodePort;
 import com.chunjae.saladbox.member.application.usecase.CreateVerificationCodeUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;

@@ -39,13 +39,13 @@ class SendVerificationCodeService implements SendVerificationCodeUseCase {
 
 
     //인증메일 생성
-    private SimpleMailMessage createEmailForm(String toEmail, String code) {
+    private SimpleMailMessage createEmailForm(String toEmail, String verificationCode) {
 
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(toEmail);
         message.setSubject("[샐러드박스] 이메일 인증번호 안내");
-        message.setText(code);
+        message.setText(verificationCode);
 
         return message;
     }

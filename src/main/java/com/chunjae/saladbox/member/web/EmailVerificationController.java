@@ -52,10 +52,17 @@ public class EmailVerificationController {
 
     //이메일 인증
     @GetMapping("/verify")
-    void verify(String verificationCode) {
+    void verify(String verificationCode) {   //프론트에서 요청할 때 email + verificationCode 합쳐서 보낸다.
         if(!checkVerificationCodeUseCase.isValidCode(verificationCode)){
             throw new InvalidVerificationCodeException(verificationCode);
         }
     }
+
+
+    //TODO
+    //인증코드를 디비에 저장할 때 인증여부 boolean 으로 저장하고,
+    //인증여부가 N인 값이 디비에 있다면 , Y로 바꾸고 성공리턴
+    //인증시도할 때 인증코드가 디비에 없거나 이미 만료된 (인증여부가 Y인) 번호라면 InvalidVerificationCodeException 발생
+
 
 }

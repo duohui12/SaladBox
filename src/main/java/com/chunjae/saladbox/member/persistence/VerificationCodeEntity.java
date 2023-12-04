@@ -16,4 +16,6 @@ public class VerificationCodeEntity {
     @Id
     private String code;
 
+    private Boolean isValidated;
+
 }

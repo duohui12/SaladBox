@@ -1,12 +1,17 @@
 package com.chunjae.saladbox.member.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
-@AllArgsConstructor
+
+@Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member {
     private String email;
     private String password;
     private String name;
 }
+
+
+
