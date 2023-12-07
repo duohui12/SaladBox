@@ -31,7 +31,7 @@ class SendVerificationCodeService implements SendVerificationCodeUseCase {
         3. 사용자 이메일로 인증코드 발송
          */
 
-        saveVerificationCodePort.save(toEmail+verificationCode);
+        saveVerificationCodePort.save(toEmail+verificationCode, false);
         SimpleMailMessage emailForm = createEmailForm(toEmail, verificationCode);
         javaMailSender.send(emailForm);
         return verificationCode;

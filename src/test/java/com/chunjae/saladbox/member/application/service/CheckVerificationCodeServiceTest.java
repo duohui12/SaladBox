@@ -1,6 +1,7 @@
 package com.chunjae.saladbox.member.application.service;
 
 import com.chunjae.saladbox.member.application.port.GetVerificationCodePort;
+import com.chunjae.saladbox.member.application.port.SaveVerificationCodePort;
 import com.chunjae.saladbox.member.domain.VerificationCode;
 import org.junit.jupiter.api.*;
 
@@ -15,11 +16,14 @@ class CheckVerificationCodeServiceTest {
 
     private static CheckVerificationCodeService checkVerificationCodeService;
     private static GetVerificationCodePort getVerificationCodePort;
+    private static SaveVerificationCodePort saveVerificationCodePort;
 
     @BeforeAll
     static void setup(){
         getVerificationCodePort = mock(GetVerificationCodePort.class);
-        checkVerificationCodeService = new CheckVerificationCodeService(getVerificationCodePort);
+        saveVerificationCodePort = mock(SaveVerificationCodePort.class);
+        checkVerificationCodeService =
+                new CheckVerificationCodeService(getVerificationCodePort,saveVerificationCodePort);
     }
 
     @Nested
@@ -31,7 +35,7 @@ class CheckVerificationCodeServiceTest {
         class Context_with_valid_code{
 
             private String validCode = "dh1234@gmail.com0123456789";
-            private VerificationCode verificationCode = new VerificationCode(validCode);
+            private VerificationCode verificationCode = new VerificationCode(validCode,false);
 
             @BeforeEach
             void setup(){

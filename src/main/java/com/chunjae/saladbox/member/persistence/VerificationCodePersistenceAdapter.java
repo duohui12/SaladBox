@@ -18,8 +18,8 @@ class VerificationCodePersistenceAdapter implements SaveVerificationCodePort
     private final Mapper mapper;
 
     @Override
-    public String save(String code) {
-        VerificationCodeEntity entity = new VerificationCodeEntity(code,false);
+    public String save(String code, boolean isValidated) {
+        VerificationCodeEntity entity = new VerificationCodeEntity(code,isValidated);
         return verificationCodeSpringDataRepository.save(entity).getCode();
     }
 

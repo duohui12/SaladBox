@@ -1,6 +1,7 @@
 package com.chunjae.saladbox.member.application.service;
 
 import com.chunjae.saladbox.member.application.port.GetVerificationCodePort;
+import com.chunjae.saladbox.member.application.port.SaveVerificationCodePort;
 import com.chunjae.saladbox.member.application.usecase.CheckVerificationCodeUseCase;
 import com.chunjae.saladbox.member.domain.VerificationCode;
 import lombok.RequiredArgsConstructor;
@@ -13,14 +14,18 @@ import java.util.Optional;
 class CheckVerificationCodeService implements CheckVerificationCodeUseCase {
 
     private final GetVerificationCodePort getVerificationCodePort;
+    private final SaveVerificationCodePort saveVerificationCodePort;
 
     @Override
     public boolean isValidCode(String code) {
         Optional<VerificationCode> verificationCode = getVerificationCodePort.findByCode(code);
-        return verificationCode.isPresent() && verificationCode.get().checkValidation();
+
+        if(verificationCode.isPresent() && !verificationCode.get().getIsValidated()){
+            saveVerificationCodePort.save(verificationCode.get().getCode(), true);
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }
-
-
-

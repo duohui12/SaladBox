@@ -43,7 +43,7 @@ class SendVerificationCodeServiceTest {
                 saveVerificationCodePort = mock(SaveVerificationCodePort.class);
                 sendVerificationCodeService = new SendVerificationCodeService(javaMailSender, saveVerificationCodePort);
 
-                given(saveVerificationCodePort.save(email+validVerificationCode)).willReturn(email+validVerificationCode);
+                given(saveVerificationCodePort.save(email+validVerificationCode,false)).willReturn(email+validVerificationCode);
             }
 
             @Test
@@ -52,7 +52,7 @@ class SendVerificationCodeServiceTest {
                 assertThat(sendVerificationCodeService.sendVerificationCode(email, validVerificationCode))
                         .isEqualTo(validVerificationCode);
 
-                verify(saveVerificationCodePort).save(email+validVerificationCode);
+                verify(saveVerificationCodePort).save(email+validVerificationCode, false);
             }
 
             @Test
