@@ -27,7 +27,7 @@ class VerificationCodePersistenceAdapter implements SaveVerificationCodePort
     public Optional<VerificationCode> findByCode(String code) {
         Optional<VerificationCodeEntity> verificationCodeEntity = verificationCodeSpringDataRepository.findByCode(code);
         VerificationCode verificationCode = verificationCodeEntity.isPresent() ? mapper.map(verificationCodeEntity, VerificationCode.class) : null;
-        return Optional.of(verificationCode);
+        return Optional.ofNullable(verificationCode);
     }
 
 }
